@@ -16,12 +16,10 @@ class batchnorm_relu{
      void CCS_BLOCK(run)(
                         bufType input[64*64*8], // memory interface
                         bufType output[64*64*8],
-                        filterType gamma[736],
-                        filterType beta[736],
                         ac_int<7, false> &channels, // direct input
                         ac_int<7, false> &height, // direct input
                         ac_int<7, false> &width, // direct input
-                        ac_int<10, false> &filter_offset
+                        ac_int<10, false> &offset
                         ) 
     {        
     ac_int<13, false> num_elements = height * width;
@@ -55,11 +53,12 @@ class batchnorm_relu{
         LOOP_OUT: for (i = 0; i < num_elements; i++) {
             idx = c * num_elements + i;
             sum = var + epsilon;
-            out_tmp = gamma[c+offset] * ((input[idx] - mean) / ac_math::ac_sqrt_pwl(sum, var_sqrt)) + beta[c+offset];
+            ac_math::ac_sqrt_pwl(sum, var_sqrt);
+            out_tmp = gamma_pretrain[c+offset] * ((input[idx] - mean) / var_sqrt) + beta_pretrain[c+offset];
             output[idx] = (out_tmp > 0) ? out_tmp : 0;
         }
     }
-
+    }
 };
 
 #endif

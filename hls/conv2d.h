@@ -14,14 +14,13 @@ class conv2d{
     #pragma hls_design interface
      void CCS_BLOCK(run)(
                         bufType input[64*64*3], // memory interface
-                        bufTyoe padded_input[66*66*3], 
+                        bufType padded_input[66*66*3], 
                         bufType output[64*64*8],
-                        filterType filters[485120],
                         ac_int<7, false> &height, // direct input
                         ac_int<7, false> &width, // direct input
                         ac_int<2, false> &kernel_size, // direct input
                         ac_int<2, false> &padding, // direct input
-                        ac_int<19, false> &filter_offset, // direct input
+                        ac_int<20, false> &filter_offset, // direct input
                         ac_int<7, false> &in_channels, // direct input
                         ac_int<7, false> &out_channels // direct input
                         ) 
@@ -76,7 +75,7 @@ class conv2d{
                         LOOP_Y:    for (y = -offset; y <= offset; y++) {
                             in_idx = in_c * padded_height * padded_width + (i + x) * padded_width + (j + y);
                             filter_idx = out_c * in_channels * filter_size + in_c * filter_size + (x + offset) * kernel_size + (y + offset) + filter_offset;
-                            temp += padded_input[in_idx] * filters[filter_idx];
+                            temp += padded_input[in_idx] * filters_pretrain[filter_idx];
                         }
                     }
                     output[out_idx] = temp;

@@ -18,7 +18,7 @@ public:
         bufType output[64 * 64 * 8],
         ac_int<7, false> &channels, // direct input
         ac_int<7, false> &height,   // direct input
-        ac_int<7, false> &width     // direct input
+        ac_int<7, false> &width,     // direct input
         ac_int<3, false> &pool_size, // direct input
         ac_int<3, false> &stride     // direct input
     )
