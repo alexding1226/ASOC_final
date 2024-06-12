@@ -12,19 +12,22 @@ class conv2d{
     conv2d() {}
     #pragma hls_design interface
      void CCS_BLOCK(run)(
-                        ac_fixed<8, 8, true> input[64*64*3], // memory interface
-                        ac_fixed<8, 8, true> padded_input[66*66*3], 
-                        ac_fixed<8, 8, true> output[64*64*8],
-                        ac_fixed<8, 8, true> filters[128*128],
+                        ac_fixed<8, 4, true> input[64*64*3], // memory interface
+                        ac_fixed<8, 4, true> padded_input[66*66*3], 
+                        ac_fixed<8, 4, true> output[64*64*8],
+                        ac_fixed<4, 8, true> filters[128*128],
                         ac_int<7, false> &height, // direct input
                         ac_int<7, false> &width, // direct input
                         ac_int<2, false> &kernel_size, // direct input
-                        ac_int<2, false> &padding // direct input
+                        ac_int<2, false> &padding, // direct input
+                        ac_int<19, false> &filter_offset, // direct input
+                        ac_int<7, false> &in_channels, // direct input
+                        ac_int<7, false> &out_channels // direct input
                         ) 
     {        
-    ac_int<7, false> padded_height = height + 2 * padding;
-    ac_int<7, false> padded_width = width + 2 * padding;
-    ac_int<7, false> filter_size = kernel_size * kernel_size;
+    ac_int<8, false> padded_height = height + 2 * padding;
+    ac_int<8, false> padded_width = width + 2 * padding;
+    ac_int<8, false> filter_size = kernel_size * kernel_size;
 
     // Copy input to padded input with padding
     for (ac_int<8, false> c = 0; c < in_channels; c++) {
@@ -71,7 +74,7 @@ class conv2d{
                     LOOP_X:    for ( x = -offset; x <= offset; x++) {
                         LOOP_Y:    for (y = -offset; y <= offset; y++) {
                             in_idx = in_c * padded_height * padded_width + (i + x) * padded_width + (j + y);
-                            filter_idx = out_c * in_channels * filter_size + in_c * filter_size + (x + offset) * kernel_size + (y + offset);
+                            filter_idx = out_c * in_channels * filter_size + in_c * filter_size + (x + offset) * kernel_size + (y + offset) + filter_offset;
                             temp += padded_input[in_idx] * filters[filter_idx];
                         }
                     }

@@ -175,15 +175,20 @@ void max_pool2d(input, output, uint7 channels, uint7 height, uint7 width, uint2 
     uint6 out_height = height / stride;
     uint6 out_width = width / stride;
 
-    ac_fixed<15,9,true> max_val = input[0];
+    ac_fixed<15,9,true> max_val;
     for (uint7 c = 0; c < channels; c++) {
         for (uint66 i = 0; i < out_height; i++) {
             for (uint6 j = 0; j < out_width; j++) {
                 for (uint2 x = 0; x < pool_size; x++) {
                     for (uint2 y = 0; y < pool_size; y++) {
-                        uint15 in_idx = c * height * width + (i * stride + x) * width + (j * stride + y);
-                        if (input[in_idx] > max_val) {
-                            max_val = input[in_idx];
+                        
+                        if (x == 0 && y == 0) {
+                            max_val = input[c * height * width + (i * stride + x) * width + (j * stride + y)];
+                        } else {
+                            ac_fixed<15,9,true> val = input[c * height * width + (i * stride + x) * width + (j * stride + y)];
+                            if (val > max_val) {
+                                max_val = val;
+                            }
                         }
                     }
                 }
