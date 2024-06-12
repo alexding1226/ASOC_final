@@ -12,17 +12,17 @@ class batchnorm_relu{
     batchnorm_relu() {}
     #pragma hls_design interface
      void CCS_BLOCK(run)(
-                        ac_fixed<8, 4, true> input[64*64*8], // memory interface
-                        ac_fixed<8, 4, true> output[64*64*8],
-                        ac_fixed<4, 8, true> gamma[736],
-                        ac_fixed<4, 8, true> beta[736],
+                        ac_fixed<12, 4, true> input[64*64*8], // memory interface
+                        ac_fixed<12, 4, true> output[64*64*8],
+                        ac_fixed<12, 4, true> gamma[736],
+                        ac_fixed<12, 4, true> beta[736],
                         ac_int<7, false> &channels, // direct input
                         ac_int<7, false> &height, // direct input
                         ac_int<7, false> &width // direct input
                         ) 
     {        
     ac_int<13, false> num_elements = height * width;
-    ac_fixed<0,17,false> epsilon = 1e-5;
+    ac_fixed<17,0,false> epsilon = 1e-5;
 
     LOOP_CH: for (ac_int<8, false> c = 0; c < channels; c++) {
         ac_fixed<14,8,false>  mean     = 0;

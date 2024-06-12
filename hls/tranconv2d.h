@@ -12,9 +12,9 @@ class tranconv2d{
     tranconv2d() {}
     #pragma hls_design interface
      void CCS_BLOCK(run)(
-                        ac_fixed<8, 4, true> input[64*64*8], // memory interface
-                        ac_fixed<8, 4, true> output[64*64*8],
-                        ac_fixed<4, 8, true> filters[128*128],
+                        ac_fixed<12, 4, true> input[64*64*8], // memory interface
+                        ac_fixed<12, 4, true> output[64*64*8],
+                        ac_fixed<12, 4, true> filters[128*128],
                         ac_int<7, false> &height, // direct input
                         ac_int<7, false> &width, // direct input
                         ac_int<2, false> &kernel_size, // direct input
@@ -40,7 +40,7 @@ class tranconv2d{
     ac_int<20, false> in_idx;
     ac_int<20, false> filter_idx;
     ac_int<20, false> out_idx;
-    ac_fixed<8, 4, true> temp;
+    ac_fixed<12, 4, true> temp;
     ac_int<20, false> out_i;
     ac_int<20, false> out_j;
 

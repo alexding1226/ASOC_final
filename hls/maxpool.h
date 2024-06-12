@@ -13,8 +13,8 @@ public:
     maxpool() {}
 #pragma hls_design interface
     void CCS_BLOCK(run)(
-        ac_fixed<8, 4, true> input[64 * 64 * 8], // memory interface
-        ac_fixed<8, 4, true> output[64 * 64 * 8],
+        ac_fixed<12, 4, true> input[64 * 64 * 8], // memory interface
+        ac_fixed<12, 4, true> output[64 * 64 * 8],
         ac_int<7, false> &channels, // direct input
         ac_int<7, false> &height,   // direct input
         ac_int<7, false> &width     // direct input
