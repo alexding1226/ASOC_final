@@ -24,7 +24,7 @@ class batchnorm_relu{
     ac_int<13, false> num_elements = height * width;
     ac_fixed<0,17,false> epsilon = 1e-5;
 
-    for (ac_int<8, false> c = 0; c < channels; c++) {
+    LOOP_CH: for (ac_int<8, false> c = 0; c < channels; c++) {
         ac_fixed<14,8,false>  mean     = 0;
         ac_fixed<22,16,false> var      = 0;
         ac_fixed<20,8,false> mean_tmp = 0;
@@ -33,13 +33,13 @@ class batchnorm_relu{
         
 
         // Calculate mean
-        for (i = 0; i < num_elements; i++) {
+        LOOP_MEAN: for (i = 0; i < num_elements; i++) {
             mean_tmp += input[c * num_elements + i];
         }
         mean = mean_tmp / num_elements;
 
         // Calculate variance
-        for (i = 0; i < num_elements; i++) {
+        LOOP_VAR: for (i = 0; i < num_elements; i++) {
             var_tmp += (input[c * num_elements + i] - mean) * (input[c * num_elements + i] - mean);
         }
         var= var_tmp / num_elements;
@@ -49,7 +49,7 @@ class batchnorm_relu{
         ac_fixed<22,17,false> sum;
         ac_fixed<22,16,false> out_tmp;
         // Normalize, scale, and shift
-        for (i = 0; i < num_elements; i++) {
+        LOOP_OUT: for (i = 0; i < num_elements; i++) {
             idx = c * num_elements + i;
             sum = var + epsilon;
             out_tmp = gamma[c] * ((input[idx] - mean) / ac_math::ac_sqrt_pwl(sum, var_sqrt)) + beta[c];

@@ -29,16 +29,7 @@ class tranconv2d{
     ac_int<10, false> out_height = height * stride;
     ac_int<10, false> out_width = width * stride;
 
-    // Copy input to padded input with padding
-    for (ac_int<8, false> c = 0; c < in_channels; c++) {
-        for (ac_int<7, false> h = 0; h < height; h++) {
-            #pragma hls_pipeline_init_interval 1
-            for (ac_int<7, false> w = 0; w < width; w++) {
-                padded_input[c * padded_height * padded_width + (h + padding) * padded_width + padding + w] = input[c * height * width + h * width + w]
-            }
-        }
-    }
-
+    
     // Define the loop variables
     ac_int<8, false> out_c;
     ac_int<8, false> in_c;
