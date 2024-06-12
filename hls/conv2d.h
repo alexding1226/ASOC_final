@@ -12,10 +12,10 @@ class conv2d{
     conv2d() {}
     #pragma hls_design interface
      void CCS_BLOCK(run)(
-                        ac_fixed<8, 4, true> input[64*64*3], // memory interface
-                        ac_fixed<8, 4, true> padded_input[66*66*3], 
-                        ac_fixed<8, 4, true> output[64*64*8],
-                        ac_fixed<4, 8, true> filters[128*128],
+                        ac_fixed<12, 4, true> input[64*64*3], // memory interface
+                        ac_fixed<12, 4, true> padded_input[66*66*3], 
+                        ac_fixed<12, 4, true> output[64*64*8],
+                        ac_fixed<12, 8, true> filters[128*128],
                         ac_int<7, false> &height, // direct input
                         ac_int<7, false> &width, // direct input
                         ac_int<2, false> &kernel_size, // direct input
@@ -34,7 +34,7 @@ class conv2d{
         for (ac_int<7, false> h = 0; h < height; h++) {
             #pragma hls_pipeline_init_interval 1
             for (ac_int<7, false> w = 0; w < width; w++) {
-                padded_input[c * padded_height * padded_width + (h + padding) * padded_width + padding + w] = input[c * height * width + h * width + w]
+                padded_input[c * padded_height * padded_width + (h + padding) * padded_width + padding + w] = input[c * height * width + h * width + w];
             }
         }
     }
@@ -57,12 +57,12 @@ class conv2d{
     ac_int<8, false> in_c;
     ac_int<7, false> i;
     ac_int<7, false> j;
-    ac_int<2, false> x;
-    ac_int<2, false> y;
+    ac_int<3, true> x;
+    ac_int<3, true> y;
     ac_int<20, false> in_idx;
     ac_int<20, false> filter_idx;
     ac_int<20, false> out_idx;
-    ac_fixed<8, 8, true> temp;
+    ac_fixed<12, 4, true> temp;
 
     // Apply the convolution
     LOOP_OUT:    for (out_c = 0; out_c < out_channels; out_c++) {
