@@ -5,6 +5,7 @@
 #include <ac_channel.h>
 #include <mc_scverify.h>
 #include <ac_fixed.h>
+#include <defs.h>
 
 class conv2d{
 
@@ -12,10 +13,10 @@ class conv2d{
     conv2d() {}
     #pragma hls_design interface
      void CCS_BLOCK(run)(
-                        ac_fixed<12, 4, true> input[64*64*3], // memory interface
-                        ac_fixed<12, 4, true> padded_input[66*66*3], 
-                        ac_fixed<12, 4, true> output[64*64*8],
-                        ac_fixed<12, 8, true> filters[128*128],
+                        bufType input[64*64*3], // memory interface
+                        bufTyoe padded_input[66*66*3], 
+                        bufType output[64*64*8],
+                        filterType filters[485120],
                         ac_int<7, false> &height, // direct input
                         ac_int<7, false> &width, // direct input
                         ac_int<2, false> &kernel_size, // direct input

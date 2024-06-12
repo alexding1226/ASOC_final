@@ -5,6 +5,8 @@
 #include <ac_channel.h>
 #include <mc_scverify.h>
 #include <ac_fixed.h>
+#include <ac_math/ac_sqrt_pwl.h>
+#include <defs.h>
 
 class batchnorm_relu{
 
@@ -12,13 +14,14 @@ class batchnorm_relu{
     batchnorm_relu() {}
     #pragma hls_design interface
      void CCS_BLOCK(run)(
-                        ac_fixed<12, 4, true> input[64*64*8], // memory interface
-                        ac_fixed<12, 4, true> output[64*64*8],
-                        ac_fixed<12, 4, true> gamma[736],
-                        ac_fixed<12, 4, true> beta[736],
+                        bufType input[64*64*8], // memory interface
+                        bufType output[64*64*8],
+                        filterType gamma[736],
+                        filterType beta[736],
                         ac_int<7, false> &channels, // direct input
                         ac_int<7, false> &height, // direct input
-                        ac_int<7, false> &width // direct input
+                        ac_int<7, false> &width, // direct input
+                        ac_int<10, false> &filter_offset
                         ) 
     {        
     ac_int<13, false> num_elements = height * width;
@@ -52,7 +55,7 @@ class batchnorm_relu{
         LOOP_OUT: for (i = 0; i < num_elements; i++) {
             idx = c * num_elements + i;
             sum = var + epsilon;
-            out_tmp = gamma[c] * ((input[idx] - mean) / ac_math::ac_sqrt_pwl(sum, var_sqrt)) + beta[c];
+            out_tmp = gamma[c+offset] * ((input[idx] - mean) / ac_math::ac_sqrt_pwl(sum, var_sqrt)) + beta[c+offset];
             output[idx] = (out_tmp > 0) ? out_tmp : 0;
         }
     }

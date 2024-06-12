@@ -5,6 +5,7 @@
 #include <ac_channel.h>
 #include <mc_scverify.h>
 #include <ac_fixed.h>
+#include <defs.h>
 
 class maxpool
 {
@@ -13,8 +14,8 @@ public:
     maxpool() {}
 #pragma hls_design interface
     void CCS_BLOCK(run)(
-        ac_fixed<12, 4, true> input[64 * 64 * 8], // memory interface
-        ac_fixed<12, 4, true> output[64 * 64 * 8],
+        bufType input[64 * 64 * 8], // memory interface
+        bufType output[64 * 64 * 8],
         ac_int<7, false> &channels, // direct input
         ac_int<7, false> &height,   // direct input
         ac_int<7, false> &width     // direct input

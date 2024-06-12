@@ -5,6 +5,7 @@
 #include <ac_channel.h>
 #include <mc_scverify.h>
 #include <ac_fixed.h>
+#include <defs.h>
 
 class tranconv2d{
 
@@ -12,13 +13,12 @@ class tranconv2d{
     tranconv2d() {}
     #pragma hls_design interface
      void CCS_BLOCK(run)(
-                        ac_fixed<12, 4, true> input[64*64*8], // memory interface
-                        ac_fixed<12, 4, true> output[64*64*8],
-                        ac_fixed<12, 4, true> filters[128*128],
+                        bufType input[64*64*8], // memory interface
+                        bufType output[64*64*8],
+                        filterType filters[485120],
                         ac_int<7, false> &height, // direct input
                         ac_int<7, false> &width, // direct input
                         ac_int<2, false> &kernel_size, // direct input
-                        ac_int<2, false> &padding, // direct input
                         ac_int<19, false> &filter_offset, // direct input
                         ac_int<7, false> &in_channels, // direct input
                         ac_int<7, false> &out_channels // direct input
