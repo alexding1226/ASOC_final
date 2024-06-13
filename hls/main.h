@@ -48,7 +48,7 @@ class main{
                         ) 
     {        
     
-    ac_int <8, false> i;
+    ac_int <20, false> i;
     for (i = 0; i<3*64*64; i++){
         buf1[i] = input.read();
     }
